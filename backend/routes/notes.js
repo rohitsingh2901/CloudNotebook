@@ -7,7 +7,7 @@ const notes = require('../models/Notes')
 
 
 // Route 1 : Create Note of a user
-route.post('/createnote',fetchUser,[body('title',"Enter a valid tittle").exists(),body('description',"Description must be atleast 3 character long").isLength({min:3})],async (req,res)=>{
+route.post('/createnote',fetchUser,[body('title',"Enter a valid tittle").notEmpty().exists(),body('description',"Description must be atleast 3 character long").isLength({min:3})],async (req,res)=>{
     try {
         const result = validationResult(req);
         if (!result.isEmpty()) {

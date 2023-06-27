@@ -53,7 +53,7 @@ route.post('/create_users',[body('Email',"Enter a valid email").isEmail(),body('
 //Route 2 : login user authentication
 
 route.post('/login',
-[body('Email',"Enter a valid email").isEmail().exists(),body('Password').exists()], async(req,res)=>{
+[body('Email',"Enter a valid email").isEmail().notEmpty().exists(),body('Password').notEmpty().exists()], async(req,res)=>{
   try{
   const result = validationResult(req);
   if (!result.isEmpty()) {
