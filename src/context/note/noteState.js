@@ -3,8 +3,6 @@ import notecontext from "./noteContext";
 
 
 
-
-
 const NoteState = (props)=>{
 
     
@@ -17,7 +15,7 @@ const NoteState = (props)=>{
         method: "GET",
         headers: {
           "Content-type": "application/json",
-          "auth-token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ4ZTZlMTMzNjMwOWIyMWEzNTljMGM5In0sImlhdCI6MTY4NzA1NTkwNH0.TF-jH8_QelwEQJJvseT1gee6co99zoy24vkyaZZygng"
+          "auth-token" : localStorage.getItem('token')
         }
       })
       .then(response => response.json())
@@ -34,7 +32,7 @@ const NoteState = (props)=>{
         method: "POST",
         headers: {
           "Content-type": "application/json",
-          "auth-token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ4ZTZlMTMzNjMwOWIyMWEzNTljMGM5In0sImlhdCI6MTY4NzA1NTkwNH0.TF-jH8_QelwEQJJvseT1gee6co99zoy24vkyaZZygng"
+          "auth-token" : localStorage.getItem('token')
         },
         body: JSON.stringify({title,description})
       })
@@ -58,7 +56,7 @@ const NoteState = (props)=>{
         method: "PUT",
         headers: {
           "Content-type": "application/json",
-          "auth-token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ4ZTZlMTMzNjMwOWIyMWEzNTljMGM5In0sImlhdCI6MTY4NzA1NTkwNH0.TF-jH8_QelwEQJJvseT1gee6co99zoy24vkyaZZygng"
+          "auth-token" : localStorage.getItem('token')
         },
         body: JSON.stringify({title,description})
       })
@@ -83,11 +81,15 @@ const NoteState = (props)=>{
     }
     //Delete a note
     const deletenote = (id)=>{
+
+
+      
+
       fetch(`http://localhost:5000/deletenote/${id}`, {
         method: "DELETE",
         headers: {
           "Content-type": "application/json",
-          "auth-token" : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjQ4ZTZlMTMzNjMwOWIyMWEzNTljMGM5In0sImlhdCI6MTY4NzA1NTkwNH0.TF-jH8_QelwEQJJvseT1gee6co99zoy24vkyaZZygng"
+          "auth-token" : localStorage.getItem('token')
         }
       })
       .then(response => response.json())
@@ -98,15 +100,9 @@ const NoteState = (props)=>{
 
       const fnotes = notes.filter((n)=>{return n._id!==id})
       setnote(fnotes)
-      document.getElementById('alert3').classList.remove('d-none')
-      document.getElementById('alert3').classList.add('show')
-      setTimeout(() => {
-        document.getElementById('alert3').classList.remove('show')
-        document.getElementById('alert3').classList.add('d-none')
-      }, 3000);
     }
     return(
-        <notecontext.Provider value={{notes,addnote,updatenote,deletenote,getnotes}}>
+        <notecontext.Provider value={{notes,addnote,updatenote,deletenote,getnotes,setnote}}>
             {props.children}
         </notecontext.Provider>
     )

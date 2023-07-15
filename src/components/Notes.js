@@ -2,12 +2,19 @@ import React, { useEffect,useRef ,useState} from "react";
 import { useContext } from "react";
 import notecontext from "../context/note/noteContext";
 import NoteItem from "./NoteItem";
+import { useNavigate } from "react-router-dom";
 
-const Notes = () => {
+const Notes = (props) => {
   const allNotes = useContext(notecontext);
+  const navigate = useNavigate();
   const { notes, getnotes,updatenote } = allNotes;
   useEffect(() => {
-    getnotes();
+    if(localStorage.getItem('token')){
+      getnotes();
+    }
+    else{
+      navigate('/login')
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const ref = useRef(null);
@@ -25,12 +32,7 @@ const Notes = () => {
  const handdlebtn = (e)=>{
     e.preventDefault();
     updatenote(note.id,note.etitle,note.edescription)
-    document.getElementById('alert2').classList.remove('d-none')
-    document.getElementById('alert2').classList.add('show')
-    setTimeout(() => {
-      document.getElementById('alert2').classList.remove('show')
-      document.getElementById('alert2').classList.add('d-none')
-    }, 3000);
+    props.ShowAlert('Note updated successfully','success')
     refclose.current.click();
  }
   return (
@@ -121,7 +123,7 @@ const Notes = () => {
         </div>
         {    
         notes.map((n) => { 
-                return <NoteItem notes={n} updateNote={updateNote} key={n._id} />;
+                return <NoteItem confirm={props.confirm}  notes={n} updateNote={updateNote} key={n._id} />;
         })}
       </div>
     </>

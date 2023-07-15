@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-const Login = () => {
+const Login = (props) => {
+    const {ShowAlert} = props
     const navigate = useNavigate();
     const [details, setdetails] = useState({"email":"","password" : ""})
     const handdleSubmit =  (e) => {
@@ -18,9 +19,11 @@ const Login = () => {
         if(json.authToken){
             console.log(json)
             localStorage.setItem('token', json.authToken)
+            ShowAlert(`Welcome ${json.name}`,'success')
             navigate('/')
         }
         else{
+          ShowAlert('Invalid Credentials...','danger')
           console.log('Undefined title or description')
         }
       })

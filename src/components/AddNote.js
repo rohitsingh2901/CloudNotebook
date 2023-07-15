@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import notecontext from '../context/note/noteContext'
-const AddNote = () => {
+const AddNote = (props) => {
 const allNotes = useContext(notecontext);
  const {addnote} = allNotes
 const [note, setnote] = useState({"title":"","description" : ""})
@@ -30,15 +30,9 @@ const [note, setnote] = useState({"title":"","description" : ""})
       document.getElementById('w2').classList.add('hidden')
     }
     if(check) return
-
     addnote(note.title,note.description)
     setnote({"title":"","description" : ""})
-    document.getElementById('alert1').classList.remove('d-none')
-    document.getElementById('alert1').classList.add('show')
-    setTimeout(() => {
-      document.getElementById('alert1').classList.remove('show')
-      document.getElementById('alert1').classList.add('d-none')
-    }, 3000);
+    props.ShowAlert('Note added successfully','success')
  }
 
  const onChange = (e)=>{

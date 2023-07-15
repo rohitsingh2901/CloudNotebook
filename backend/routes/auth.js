@@ -78,7 +78,7 @@ route.post('/login',
   console.log(data.user.id)
   const authToken = jwt.sign(data,JWT_SecretToken);
   // res.send(curruser)
-  res.send({authToken})
+  res.send({authToken,name : userExists.Name})
 
 }
 catch{
