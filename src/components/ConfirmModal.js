@@ -31,13 +31,13 @@ const ConfirmModal = ({ message, onConfirm, onCancel }) => {
             <div class="modal-footer">
               <button
                 type="button"
-                class="btn btn-secondary"
+                class="btn btn-light"
                 data-dismiss="modal"
                 onClick={onCancel}
               >
                 Cancel
               </button>
-              <button data-dismiss="modal" onClick={onConfirm} type="button" class="btn btn-primary">
+              <button data-dismiss="modal" onClick={onConfirm} type="button" class="btn btn-light">
                 Delete
               </button>
             </div>

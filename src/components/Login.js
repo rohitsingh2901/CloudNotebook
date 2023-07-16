@@ -63,7 +63,7 @@ const Login = (props) => {
             placeholder="Password"
           />
         </div>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className="btn btn-light">
           Login
         </button>
       </form>

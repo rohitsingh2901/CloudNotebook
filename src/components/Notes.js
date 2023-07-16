@@ -40,7 +40,7 @@ const Notes = (props) => {
       <button
         ref={ref}
         type="button"
-        className="btn btn-primary d-none"
+        className="btn btn-light d-none"
         data-toggle="modal"
         data-target="#exampleModalCenter"
       >
@@ -105,12 +105,12 @@ const Notes = (props) => {
               <button
                 ref={refclose}
                 type="button"
-                className="btn btn-secondary"
+                className="btn btn-light"
                 data-dismiss="modal"
               >
                 Close
               </button>
-              <button onClick={handdlebtn} type="button" className="btn btn-primary">
+              <button onClick={handdlebtn} type="button" className="btn btn-light">
                 Update Note
               </button>
             </div>

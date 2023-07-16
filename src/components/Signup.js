@@ -92,7 +92,7 @@ const onChange = (e)=>{
               minLength={5}
             />
           </div>
-          <button type="submit" class="btn btn-primary">
+          <button type="submit" class="btn btn-light">
             Submit
           </button>
         </form>

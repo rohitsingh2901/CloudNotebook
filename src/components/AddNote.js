@@ -78,7 +78,7 @@ const [note, setnote] = useState({"title":"","description" : ""})
         <small id="w2" className="hidden" style={{"color" :"red"}}>Please enter valid description</small>
       </div>
       <div className="mb-3">
-        <button onClick={handdleClick} type="submit" className="btn btn-primary mb-3">
+        <button onClick={handdleClick} type="submit" className="btn btn-light mb-3">
           Add Note
         </button>
         

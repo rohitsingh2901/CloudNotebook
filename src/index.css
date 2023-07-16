@@ -20,6 +20,32 @@ i{
 }
 
 nav{
-  background-color: rgb(123, 123, 59);
-  border-radius: 50px;
+  background-color: rgb(165, 30, 30);
+  border-radius: 0px 50px;
+  animation: slideInRight 1s;
+}
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.btn{
+  background-color: black;
+  color: white;
+}
+.btn:focus{
+  background-color: rgb(80, 56, 56);
+  color: white;
+
+}
+.btn:hover{
+  background-color: rgb(80, 56, 56);
+  color: white;
 }
