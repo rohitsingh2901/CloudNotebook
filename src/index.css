@@ -20,10 +20,11 @@ i{
 }
 
 nav{
-  background-color: rgb(165, 30, 30);
-  border-radius: 0px 50px;
+  background-image: linear-gradient(to right,rgb(233, 47, 47),rgb(128, 105, 246));
+  border-radius:  0% 0% 50% 50%;
   animation: slideInRight 1s;
 }
+
 @keyframes slideInRight {
   0% {
     opacity: 0;
@@ -35,6 +36,18 @@ nav{
     transform: translateY(0);
   }
 }
+.active{
+  font-size:x-large;
+}
+nav img{
+  transition: transform 0.3s ease-in;
+}
+nav img:hover{
+  transform: scale(1.1);;
+}
+
+
+
 
 .btn{
   background-color: black;
