@@ -1,13 +1,14 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Home from "./components/Home"
+import YourNotes from "./components/YourNotes"
 import About from "./components/About";
 import NoteState from "./context/note/noteState";
 import Alert from "./components/Alert";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import { useState } from "react";
+import Home from "./components/Home";
 
 
 
@@ -28,9 +29,12 @@ function App() {
       <Router>
         <Navbar />
         <Alert alert={alert}/>
-      <div className="container">
+      <div className="">
         <Routes>
           <Route   path="/" element={<Home ShowAlert={ShowAlert}/>}/>
+        </Routes>
+        <Routes>
+          <Route   path="/notes" element={<YourNotes ShowAlert={ShowAlert}/>}/>
         </Routes>
         <Routes>
           <Route  path="/about" element={<About />}/>

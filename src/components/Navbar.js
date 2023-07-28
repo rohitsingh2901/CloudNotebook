@@ -27,8 +27,11 @@ const Navbar = () => {
   <div className="collapse navbar-collapse mb-4" id="navbarSupportedContent">
     <ul className="navbar-nav mr-auto">
       <li className={`navbar-brand ${location.pathname==='/' ? 'active' : '' }`}>
-        <Link className="nav-link" to="/">Home <span className="sr-only">(current)</span></Link>
+        <Link className="nav-link" to="/">Home</Link>
       </li>
+      {localStorage.getItem("token") ? (<li className={`navbar-brand ${location.pathname==='/notes' ? 'active' : '' }`}>
+        <Link className="nav-link" to="/notes">My Notes</Link>
+      </li>) : ('') }
       <li className={`navbar-brand ${location.pathname==='/about' ? 'active' : '' }`}>
         <Link className="nav-link" to="/about">About</Link>
       </li>
