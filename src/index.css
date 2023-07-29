@@ -37,8 +37,9 @@ nav{
     transform: translateY(0);
   }
 }
-.active{
-  font-size:x-large;
+.active .nav-link{
+ font-weight: bold;
+
 }
 nav img{
   transition: transform 0.3s ease-in;

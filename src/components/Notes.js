@@ -119,7 +119,7 @@ const Notes = (props) => {
       </div>
       <div className="container row">
         <div style={{"":""}}>
-            {notes.length===0 && 'There are no notes available at the moment.'}
+            {notes.length===0 && 'No notes are  available right now, create one.'}
         </div>
         {    
         notes.map((n) => { 

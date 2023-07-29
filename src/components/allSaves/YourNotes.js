@@ -1,11 +1,11 @@
 import React from "react";
-import Notes from "./Notes";
-import AddNote from "./AddNote";
+import Notes from "../Notes";
+import AddNote from "../AddNote";
 
 const YourNotes = (props) => {
   return (
     <>
-      <div>
+      <div className="container">
         {localStorage.getItem("token") ? (
           <>
             <AddNote ShowAlert={props.ShowAlert} />

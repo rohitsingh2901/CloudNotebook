@@ -3,7 +3,7 @@ import React from "react";
 const Alert = (props) => {
   return (
     <>
-      <div style={{ "height": "55px", "display":"flex","justifyContent":"center" }}>
+      <div style={{ "height": "55px", "display":"flex","justifyContent":"center","marginTop":"15px" }}>
         {props.alert && <div
           id="alert"
           className={`alert alert-${props.alert.type} alert-dismissible fade show w-25 text-xs mb-2`}

@@ -39,7 +39,7 @@ const [note, setnote] = useState({"title":"","description" : ""})
     setnote({...note ,[e.target.name] : e.target.value} )
  }
   return (
-    <div>
+    <div className="container">
       <form>
       <h1>Add a Note</h1>
       <div className="mb-3">

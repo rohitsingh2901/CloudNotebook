@@ -35,7 +35,7 @@ const Login = (props) => {
         setdetails({...details ,[e.target.name] : e.target.value} )
      }
   return (
-    <div>
+    <div className="container">
       <form onSubmit={handdleSubmit}>
         <div className="form-group">
           <label htmlfor="email">Email address</label>

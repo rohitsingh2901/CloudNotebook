@@ -36,7 +36,7 @@ const onChange = (e)=>{
     setdetails({...details ,[e.target.name] : e.target.value} )
  }
   return (
-    <div>
+    <div className="container">
         <form onSubmit={handdleSubmit}>  
           <div class="form-group">
             <label for="name">User Name</label>

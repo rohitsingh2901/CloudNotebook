@@ -6,14 +6,14 @@ import '../index.css'
 const Home = () => {
     const [currentText, setCurrentText] = useState("");
     const allElements= {
-         1 : "Audio🎤"  ,
-         2 : "Notes📝",
-         3 : "Video🎥" ,
-         4 : "Links🔗" ,
-         5 : "Images🖼️" , 
-         6 : "Events  and Reminders📅",
-         7 : "To-Do Lists📋",
-         8 : "Location-based Notes📍"
+         1 : "Record Audio🎤"  ,
+         2 : "Save Notes📝",
+         3 : "Save Video🎥" ,
+         7 : "Save Links🔗" ,
+         5 : "Save Images🖼️" , 
+         6 : "Set Events & Reminders📅",
+         4 : "Create To-Do Lists📋",
+         8 : "Geotag Your Notes🌍"
      }
      useEffect(() => {
         const textArray = Object.values(allElements); // Convert the object values to an array
@@ -76,9 +76,18 @@ const Home = () => {
       </div>
       <div className="flex justify-between items-center">
         <div className="col-6 flex flex-col items-center">
-          <h1 className="text-center font-black">CLOUD <span className="text-green-600">NOTEBOOK</span></h1>
-          <h3 className=" font-bold text-gray-700">With our all-in-one platform</h3>
-          <h3 className=" font-bold text-gray-700">you can save&nbsp;<span className="absolute" id="typewriter">{currentText}</span></h3>
+          <div className="text-center w-100 mt-2">
+            <h1 className=" font-black">CLOUD <span className="text-red-600">NOTEBOOK</span></h1>
+          </div>
+          <div className="text-center w-100 mt-2">
+            <h3 className=" font-bold  text-gray-700">With our all-in-one platform you can</h3>
+          </div>
+          <div className="text-center w-100 mt-2 ">
+            <h3 className=" font-bold text-gray-700"><span className=" text-green-600 font-bold" id="typewriter">{currentText}</span></h3>
+          </div>
+          <div className="text-center w-100 mt-2">
+            <button className="btn btn-light mx-2">Get started</button>
+          </div>
         </div>
         <div className="col-6">
           <img className="GirlImg" src="/young-girl-her-tablet.png" alt="PhoneImg"></img>
