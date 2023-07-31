@@ -5,20 +5,21 @@ import '../index.css'
 
 const Home = () => {
     const [currentText, setCurrentText] = useState("");
-    const allElements= {
-         1 : "Record Audio🎤"  ,
-         2 : "Save Notes📝",
-         3 : "Save Video🎥" ,
-         7 : "Save Links🔗" ,
-         5 : "Save Images🖼️" , 
-         6 : "Set Events & Reminders📅",
-         4 : "Create To-Do Lists📋",
-         8 : "Geotag Your Notes🌍"
-     }
+    
      useEffect(() => {
+      const allElements= {
+        1 : "Record Audio🎤"  ,
+        2 : "Save Notes📝",
+        3 : "Save Video🎥" ,
+        7 : "Save Links🔗" ,
+        5 : "Save Images🖼️" , 
+        6 : "Set Events & Reminders📅",
+        4 : "Create To-Do Lists📋",
+        8 : "Geotag Your Notes🌍"
+    }
         const textArray = Object.values(allElements); // Convert the object values to an array
         let currentIndex = 0;
-        let currentText = "";
+        // let currentText = "";
         let char = 0;
         let timeouts = []; // Array to store the timeouts
       
