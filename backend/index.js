@@ -2,7 +2,9 @@
 const connectToMongo = require('./db');
 const express = require('express')
 var cors = require('cors')
+const path = require('path');
  
+
 connectToMongo();
 
 const app = express()
@@ -21,7 +23,7 @@ app.listen(port, () => {
 app.use('/',require('./routes/auth'))
 app.use('/',require('./routes/notes'))
 app.use('/',require('./routes/audio'))
-
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 
 

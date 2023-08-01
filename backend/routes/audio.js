@@ -3,21 +3,16 @@ const route = express.Router();
 // const { body , validationResult } = require('express-validator');
 // const fetchUser = require('../Middleware/fetchUser')
 const AudioModel = require('../models/Audio')
-const path = require('path');
 const multer = require('multer');
-
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'uploads/'); // Save the uploaded files to the 'uploads' directory
-    },
-    filename: function (req, file, cb) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-      const fileExtension = path.extname(file.originalname);
-      cb(null, file.fieldname + '-' + uniqueSuffix + fileExtension);
-    },
-  });
-
-  const upload = multer({ storage: storage });
+  destination: function (req, file, cb) {
+    cb(null, 'uploads'); // Specify the destination directory for uploaded files
+  },
+  filename: function (req, file, cb) {
+    cb(null, 'audioFile-' + Date.now() + '-' + Math.random() + '.webm'); // Generate a unique file name for the uploaded audio file
+  },
+});
+const upload = multer({ storage: storage });
 
 
   route.post('/upload-audio', upload.single('audioFile'), async (req, res) => {

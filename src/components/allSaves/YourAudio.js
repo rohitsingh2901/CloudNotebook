@@ -1,27 +1,32 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 
 export default function YourAudio() {
   const [check, setcheck] = useState(false);
-  const handleSaveAudio= async  (blob)=>{
-      try {
+  const mount = useRef(false)
+  const handleSaveAudio = async (blob) => {
+    try {
       const formData = new FormData();
-      formData.append('audioFile', blob);
-
-      const response = await fetch('http://localhost:5000/upload-audio', {  
-        method: 'POST',
-        body: formData
+      const audioBlob = new Blob([blob], { type: blob.type });
+      formData.append("audioFile", audioBlob, "audio.webm");
+      for (const key of formData.keys()) {
+        console.log(key, formData.get(key));
+      }
+      console.log(formData);
+      const response = await fetch("http://localhost:5000/upload-audio", {
+        method: "POST",
+        body: formData,
       });
 
-      if (response.ok){
-        console.log('Audio saved successfully!');
+      if (response.ok) {
+        console.log("Audio saved successfully!");
       } else {
-        console.error('Failed to save audio.');
+        console.error("Failed to save audio.");
       }
     } catch (error) {
-      console.error('Error saving audio:', error);
+      console.error("Error saving audio:", error);
     }
-  }
+  };
   const recorderControls = useAudioRecorder(
     {
       noiseSuppression: true,
@@ -29,6 +34,7 @@ export default function YourAudio() {
     },
     (err) => console.table(err) // onNotAllowedOrFound
   );
+
   const addAudioElement = (blob) => {
     const url = URL.createObjectURL(blob);
     const audio = document.createElement("audio");
@@ -47,21 +53,53 @@ export default function YourAudio() {
     audio.classList.add("my-2");
     audio.classList.add("scale-100");
     audio.src = url;
-    audio.downloadFileExtension='webm'
+    audio.downloadFileExtension = "webm";
     audio.controls = true;
     const ele = document.getElementsByClassName("audio-recorder");
     ele[0].classList.add("pointer-events-none");
     document.getElementById("showAudio").appendChild(audio);
     document.getElementById("showAudio").appendChild(add, audio);
     document.getElementById("showAudio").appendChild(del);
-    add.addEventListener('click',() => handleSaveAudio(blob))
+    add.addEventListener("click", () => handleSaveAudio(blob));
     setcheck(true);
   };
 
+  const fetchAudio = async () => {
+    try {
+      console.log('Fetching audio...');
+      const response = await fetch('http://localhost:5000/uploads/audioFile-1690869699020-0.7330815584807311.webm');
+      if (!response.ok) {
+        throw new Error('Failed to fetch audio.');
+      }
+      const audioBlob = await response.blob();
+      const url = URL.createObjectURL(audioBlob);
+      console.log('Fetched audio Blob:', audioBlob);
+      return url;
+    } catch (error) {
+      console.error('Error fetching audio:', error);
+    }
+  };
+  
+  
+
   React.useEffect(() => {
+    if(mount.current!==false){
+      return
+    }
     const ele = document.getElementsByClassName("audio-recorder");
     for (let index = 0; index < ele.length; index++) {
       ele[index].style.transform = "scale(2)";
+    }
+
+    fetchAudio().then((url) => {
+      const audio = document.createElement("audio");
+      audio.src = url;
+      audio.downloadFileExtension = "webm";
+      audio.controls = true;
+      document.getElementById("showAudio2").appendChild(audio);
+    });
+    return()=>{
+      mount.current=true;
     }
   }, []);
 
@@ -107,7 +145,7 @@ export default function YourAudio() {
       </div>
       <div className="container">
         <h1 className="todo">Your Audios</h1>
-
+        <div className="" id="showAudio2"></div>
       </div>
     </>
   );
