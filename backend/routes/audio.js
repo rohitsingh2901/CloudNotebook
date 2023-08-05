@@ -22,12 +22,16 @@ const upload = multer({ storage: storage });
       }
   
       const { filename, originalname, mimetype } = req.file;
-  
+      const {name,email,id} = req.body;
       // Create a new instance of the AudioModel
       const newAudio = new AudioModel({
         fileName: filename,
         originalName: originalname,
         mimeType: mimetype,
+        name: name,
+        email: email,
+        id: id
+
       });
   
       // Save the audio metadata to MongoDB
@@ -40,4 +44,15 @@ const upload = multer({ storage: storage });
     }
   });
   
+  route.post('/getaudio', async (req, res) => {
+    try {
+      const id = req.body.id; 
+      const users = await AudioModel.find(id);
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+    }
+  });
+
+
   module.exports = route;

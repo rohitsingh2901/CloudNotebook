@@ -38,11 +38,11 @@ const onChange = (e)=>{
   return (
     <div className="container">
         <form onSubmit={handdleSubmit}>  
-          <div class="form-group">
+          <div className="form-group">
             <label for="name">User Name</label>
             <input
               type="text"
-              class="form-control"
+              className="form-control"
               id="name"
               name="name"
               placeholder="Enter name"
@@ -50,27 +50,27 @@ const onChange = (e)=>{
               required
             />
           </div>
-          <div class="form-group">
+          <div className="form-group">
             <label for="email">Email address</label>
             <input
               type="email"
               name="email"
-              class="form-control"
+              className="form-control"
               id="exampleInputEmail1"
               placeholder="Enter email"
               onChange={onChange}
               required
 
             />
-            <small id="emailHelp" class="form-text text-muted">
+            <small id="emailHelp" className="form-text text-muted">
               We'll never share your email with anyone else.
             </small>
           </div>
-          <div class="form-group">
+          <div className="form-group">
             <label for="password">Password</label>
             <input
               type="password"
-              class="form-control"
+              className="form-control"
               name="password"
               id="password"
               placeholder="Password"
@@ -79,11 +79,11 @@ const onChange = (e)=>{
               minLength={5}
             />
           </div>
-          <div class="form-group">
+          <div className="form-group">
             <label for="cpassword">Confirm Password</label>
             <input
               type="password"
-              class="form-control"
+              className="form-control"
               name="cpassword"
               id="cpassword"
               placeholder="Password"
@@ -92,7 +92,7 @@ const onChange = (e)=>{
               minLength={5}
             />
           </div>
-          <button type="submit" class="btn btn-light">
+          <button type="submit" className="btn btn-light">
             Submit
           </button>
         </form>

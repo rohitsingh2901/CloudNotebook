@@ -5,22 +5,22 @@ const ConfirmModal = ({ message, onConfirm, onCancel }) => {
   return (
     <div>
       <div
-        class="modal fade"
+        className="modal fade"
         id="exampleModalCenter2"
         tabindex="-1"
         role="dialog"
         aria-labelledby="exampleModalCenterTitle"
         aria-hidden="true"
       >
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">
+        <div className="modal-dialog modal-dialog-centered" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLongTitle">
               {message}
               </h5>
               <button
                 type="button"
-                class="close"
+                className="close"
                 onClick={onCancel}
                 data-dismiss="modal"
                 aria-label="Close"
@@ -28,16 +28,16 @@ const ConfirmModal = ({ message, onConfirm, onCancel }) => {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div class="modal-footer">
+            <div className="modal-footer">
               <button
                 type="button"
-                class="btn btn-light"
+                className="btn btn-light"
                 data-dismiss="modal"
                 onClick={onCancel}
               >
                 Cancel
               </button>
-              <button data-dismiss="modal" onClick={onConfirm} type="button" class="btn btn-light">
+              <button data-dismiss="modal" onClick={onConfirm} type="button" className="btn btn-light">
                 Delete
               </button>
             </div>

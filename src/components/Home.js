@@ -72,7 +72,7 @@ const Home = () => {
           Welcome to <span className="text-red-600">India's</span> Number 1{" "}
           <span className="text-green-600">Note Making</span> Platform.
         </h1>
-        <p className="text-center font-bold text-gray-600"><i class="fa fa-leaf cursor-default	" style={{"fontSize":"24px","color":"green"}}></i>Go Green with Online Notes: Save Trees, Save Ideas.<i class="fa fa-leaf cursor-default" style={{"fontSize":"24px","color":"green"}}></i></p>
+        <p className="text-center font-bold text-gray-600"><i className="fa fa-leaf cursor-default	" style={{"fontSize":"24px","color":"green"}}></i>Go Green with Online Notes: Save Trees, Save Ideas.<i className="fa fa-leaf cursor-default" style={{"fontSize":"24px","color":"green"}}></i></p>
       </div>
       </div>
       <div className="flex justify-between items-center">

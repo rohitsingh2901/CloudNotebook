@@ -1,18 +1,23 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 
 export default function YourAudio() {
   const [check, setcheck] = useState(false);
-  const mount = useRef(false)
-  const handleSaveAudio = async (blob) => {
+  const [data, setData] = useState({})
+  // const [mounted, setMounted] = useState(false);  
+  
+  const mounted = useRef(false)
+  const handleSaveAudio = useCallback(async (blob,url) => {
     try {
       const formData = new FormData();
       const audioBlob = new Blob([blob], { type: blob.type });
       formData.append("audioFile", audioBlob, "audio.webm");
+      formData.append('name', data.Name);
+      formData.append('email', data.Email);
+      formData.append('id', data._id);
       for (const key of formData.keys()) {
         console.log(key, formData.get(key));
       }
-      console.log(formData);
       const response = await fetch("http://localhost:5000/upload-audio", {
         method: "POST",
         body: formData,
@@ -20,13 +25,23 @@ export default function YourAudio() {
 
       if (response.ok) {
         console.log("Audio saved successfully!");
+        const audio = document.createElement("audio");
+        audio.classList.add("my-2");
+    audio.classList.add("scale-100");
+    audio.src = url;
+    audio.downloadFileExtension = "webm";
+    audio.controls = true;
+    document.getElementById('showAudio2').appendChild(audio);
+    document.getElementById('save').disabled = true;
+    document.getElementById('save').style.hover = true;
+
       } else {
         console.error("Failed to save audio.");
       }
     } catch (error) {
       console.error("Error saving audio:", error);
     }
-  };
+  },[data._id,data.Email,data.Name]);
   const recorderControls = useAudioRecorder(
     {
       noiseSuppression: true,
@@ -43,6 +58,7 @@ export default function YourAudio() {
     add.innerHTML = "Save";
     del.innerHTML = "Delete";
     add.classList.add("mx-10");
+    add.setAttribute('id',"save");
     add.classList.add("text-white");
     add.classList.add("bg-green-600");
     add.classList.add("btn-sm");
@@ -60,48 +76,90 @@ export default function YourAudio() {
     document.getElementById("showAudio").appendChild(audio);
     document.getElementById("showAudio").appendChild(add, audio);
     document.getElementById("showAudio").appendChild(del);
-    add.addEventListener("click", () => handleSaveAudio(blob));
+    add.addEventListener("click", () => handleSaveAudio(blob,url));
     setcheck(true);
   };
 
-  const fetchAudio = async () => {
+
+  const fetchAudio = async (audioFileUrl) => {
+    console.log(audioFileUrl)
     try {
-      console.log('Fetching audio...');
-      const response = await fetch('http://localhost:5000/uploads/audioFile-1690869699020-0.7330815584807311.webm');
+      const response = await fetch(audioFileUrl);
       if (!response.ok) {
-        throw new Error('Failed to fetch audio.');
+        throw new Error("Failed to fetch audio.");
       }
       const audioBlob = await response.blob();
       const url = URL.createObjectURL(audioBlob);
-      console.log('Fetched audio Blob:', audioBlob);
+      console.log("Fetched audio Blob:", audioBlob);
       return url;
     } catch (error) {
-      console.error('Error fetching audio:', error);
+      console.error("Error fetching audio:", error);
+      return null;
     }
   };
-  
-  
+
+
 
   React.useEffect(() => {
-    if(mount.current!==false){
+    if (mounted.current) {
       return
     }
-    const ele = document.getElementsByClassName("audio-recorder");
+    const run2 = async()=>{
+      const response = await fetch("http://localhost:5000/getuser", {
+        method: "POST",
+        headers: { 'auth-token': `${localStorage.getItem('token')}` }
+      });
+
+      if (response.ok) {
+        setData(await response.json());
+      } else {
+        console.error("Please login first");
+      }
+    }
+    run2()
+    const run = async () => {
+      const res = await fetch("http://localhost:5000/getaudio", {
+        method: "POST",
+        body: JSON.stringify({id :data.id}),
+      });
+
+      if (res.ok) {
+        const x = await res.json();
+        const ele = document.getElementsByClassName("audio-recorder");
     for (let index = 0; index < ele.length; index++) {
       ele[index].style.transform = "scale(2)";
     }
 
-    fetchAudio().then((url) => {
-      const audio = document.createElement("audio");
-      audio.src = url;
-      audio.downloadFileExtension = "webm";
-      audio.controls = true;
-      document.getElementById("showAudio2").appendChild(audio);
-    });
-    return()=>{
-      mount.current=true;
+    // Fetch and add audio elements for each user
+    x.forEach(async (user) => {
+      // console.log(user)
+      const url = await fetchAudio(`http://localhost:5000/uploads/${user.fileName}`);
+      if (url) {
+        const audio = document.createElement("audio");
+        audio.src = url;
+        audio.downloadFileExtension = "webm";
+        audio.controls = true;
+
+        const container = document.createElement("div");
+        container.classList.add("my-2");
+        container.appendChild(audio);
+         console.log(audio)
+        document.getElementById("showAudio2").appendChild(container);
+      }
+    }); 
+      } else {
+        return console.error("Unable to get audio");
+      }
     }
-  }, []);
+    run()
+    return()=>{
+      mounted.current=true;
+    }
+
+  }, [data.id]);
+  // React.useEffect(()=>{
+    
+  // },[audioUsers])
 
   return (
     <>
@@ -124,18 +182,16 @@ export default function YourAudio() {
         <div className="my-8">
           <button
             disabled={check === true ? true : false}
-            className={`mx-4 text-white  bg-green-600 btn-sm ${
-              check === true ? "cursor-not-allowed	" : ""
-            }`}
+            className={`mx-4 text-white  bg-green-600 btn-sm ${check === true ? "cursor-not-allowed	" : ""
+              }`}
             onClick={recorderControls.startRecording}
           >
             Start recording
           </button>
           <button
             disabled={check === true ? true : false}
-            className={`mx-4 text-white  bg-red-600 btn-sm ${
-              check === true ? "cursor-not-allowed	" : ""
-            }`}
+            className={`mx-4 text-white  bg-red-600 btn-sm ${check === true ? "cursor-not-allowed	" : ""
+              }`}
             onClick={recorderControls.stopRecording}
           >
             Stop recording
