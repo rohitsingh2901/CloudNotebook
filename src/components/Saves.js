@@ -1,6 +1,8 @@
 import React, {useState } from "react";
 import YourNotes from "./allSaves/YourNotes";
 import YourAudio from "./allSaves/YourAudio";
+import YourVideo from "./allSaves/YourVideo";
+import YourImage from "./allSaves/YourImage";
 
 const Saves = (props) => {
   const [show, setShow] = useState(null)
@@ -12,13 +14,13 @@ const Saves = (props) => {
       setShow(<YourAudio/>);  
     }
     else if(indx===3){
-      setShow(<YourNotes/>);  
+      setShow(<YourVideo/>);  
     }
     else if(indx===4){
       setShow(<YourNotes/>);  
     }
     else if(indx===5){
-      setShow(<YourNotes/>);  
+      setShow(<YourImage/>);  
     }
     else if(indx===6){
       setShow(<YourNotes/>);  
