@@ -6,6 +6,7 @@ const fs = require('fs');
 // const { body , validationResult } = require('express-validator');
 // const fetchUser = require('../Middleware/fetchUser')
 const AudioModel = require('../models/Audio')
+const VideoModel = require('../models/Video')
 const multer = require('multer');
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -16,6 +17,15 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storage });
+const storage2 = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads'); // Specify the destination directory for uploaded files
+  },
+  filename: function (req, file, cb) {
+    cb(null, 'videoFile-' + Date.now() + '-' + Math.random() + '.webm'); // Generate a unique file name for the uploaded audio file
+  },
+});
+const upload2 = multer({ storage: storage });
 
 
   route.post('/upload-audio', upload.single('audioFile'), async (req, res) => {
@@ -44,6 +54,34 @@ const upload = multer({ storage: storage });
     } catch (error) {
       console.error('Error saving audio:', error);
       res.status(500).json({ error: 'Failed to save audio.' });
+    }
+  });
+  route.post('/upload-video', upload2.single('videoFile'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No video file received.' });
+      }
+  
+      const { filename, originalname, mimetype } = req.file;
+      const {name,email,id,heading} = req.body;
+      // Create a new instance of the videoModel
+      const newVideo = new VideoModel({
+        fileName: filename,
+        originalName: originalname,
+        mimeType: mimetype,
+        name: name,
+        email: email,
+        id: id,
+        // heading:heading,
+      });
+  
+      // Save the audio metadata to MongoDB
+      await newVideo.save();
+  
+      res.status(200).json({ message: 'Audio saved successfully.',filename:filename });
+    } catch (error) {
+      console.error('Error saving video:', error);
+      res.status(500).json({ error: 'Failed to save video.' });
     }
   });
   
