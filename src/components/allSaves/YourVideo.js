@@ -8,6 +8,11 @@ const YourVideo= () => {
   const [recordedChunks, setRecordedChunks] = React.useState([]);
   const [showCam, setShowCam] = React.useState(false);
   const [data, setData] = React.useState({})
+  const [heading, setHeading] = React.useState('')
+
+  const headingInput = (event)=>{
+    setHeading(event.target.value)
+  }
 
   const handleDataAvailable = React.useCallback(
     ({ data }) => {
@@ -70,6 +75,7 @@ const YourVideo= () => {
       formData.append('name', data.Name);
       formData.append('email', data.Email);
       formData.append('id', data._id);
+      formData.append('heading', heading);
   
       for (const key of formData.keys()) {
         console.log(key, formData.get(key));
@@ -133,7 +139,11 @@ const YourVideo= () => {
         <button className='text-black font-medium  bg-green-600 btn-sm' onClick={handleDownload}>Download</button>
         )} */}
           {recordedChunks.length > 0 && (
-        <button className='text-black font-medium  bg-green-600 btn-sm' onClick={handleSave}>Save</button>
+            <>
+              <h3>Heading</h3>
+              <input value={heading} onChange={headingInput} type="text" className="form-control" placeholder="My heading" />
+              <button className='text-black font-medium  bg-green-600 btn-sm' onClick={handleSave}>Save</button>
+            </>
         )}
           <video className='w-25' controls src={URL.createObjectURL(recordedChunks[0])}></video>
         </div>
