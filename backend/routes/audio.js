@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storage });
-const storage2 = multer.diskStorage({
+const storage2 = multer.diskStorage({ 
   destination: function (req, file, cb) {
     cb(null, 'uploads'); // Specify the destination directory for uploaded files
   },
@@ -25,7 +25,7 @@ const storage2 = multer.diskStorage({
     cb(null, 'videoFile-' + Date.now() + '-' + Math.random() + '.webm'); // Generate a unique file name for the uploaded audio file
   },
 });
-const upload2 = multer({ storage: storage });
+const upload2 = multer({ storage: storage2 });
 
 
   route.post('/upload-audio', upload.single('audioFile'), async (req, res) => {
