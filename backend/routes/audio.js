@@ -95,6 +95,16 @@ const upload2 = multer({ storage: storage2 });
     }
   });
 
+  route.post('/getvideos', async (req, res) => {
+    try {
+      const id = req.body.id; 
+      const users = await VideoModel.find(id);
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+    }
+  });
+
   route.delete('/deleteaudio/:filename', async (req, res) => {
     try {
       const { filename } = req.params;

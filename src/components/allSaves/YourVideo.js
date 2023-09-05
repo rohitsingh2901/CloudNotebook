@@ -10,6 +10,7 @@ import VideoPlayer from './VideoPlayer';
     const [showCam, setShowCam] = React.useState(false);
     const [data, setData] = React.useState({})
     const [heading, setHeading] = React.useState('')
+    const [yourVideos, setYourVideos] = React.useState([])
 
     const handleDataAvailable = React.useCallback(
       ({ data }) => {
@@ -94,8 +95,21 @@ import VideoPlayer from './VideoPlayer';
         console.error('Error saving video:', error);
       } finally{
         setHeading('');
+        fetchVideos();
       }
     };
+    const fetchVideos = async ()=>{
+      const res = await fetch("http://localhost:5000/getvideos", {
+        method: "POST",
+        body: JSON.stringify({ id: data.id }),
+      });
+
+      if (res.ok) {
+          setYourVideos(await res.json())
+      } else {
+        return console.error("Unable to get videos");
+      }
+    }
     
 
     React.useEffect(() => {
@@ -112,7 +126,8 @@ import VideoPlayer from './VideoPlayer';
         }
       }
       run2()
-      
+      fetchVideos();
+      // eslint-disable-next-line
     }, [])
     
 
@@ -133,9 +148,8 @@ return (
         </>
       )}
     </div>
-    <h3 className='my-3'>Input</h3>
+    {showCam && <h3 className='my-3'>Input</h3>}
     {showCam ? (<div className="flex justify-center"><Webcam className='rounded-2xl border-solid border-8 border-red-500 mx-3 w-50'  audio={false} ref={webcamRef} /></div>) : ('')}
-    <h3 className='my-3'>Output</h3>
     {<VideoPlayer recordedChunks={recordedChunks} />}
     {recordedChunks.length > 0 && (
       <>
@@ -148,6 +162,26 @@ return (
         </form>
       </>
     )}
+  </div>
+  <div>
+    <h1>Your Videos</h1>
+    {yourVideos[0] ? (
+      yourVideos.map((v,i)=>{
+        // const audio = document.createElement("video");
+        //     audio.src = v.fileName;
+        //     audio.downloadFileExtension = "webm";
+        //     audio.controls = true;
+        return(
+          <div key={i} className='flex items-center'>
+          <div className='w-25 flex justify-center'>
+            <h4 className='font-bold'>{i+1}.</h4>
+            <h4>&nbsp;&nbsp;{v.heading}</h4>
+          </div>
+          <video  id='videoPlayer' className='w-25 rounded-2xl border-solid border-8 border-orange-500 hover: cursor-pointer' loop controls poster="playButton.png"  src={"http://localhost:5000/uploads/"+v.fileName}></video>
+          </div>
+        )
+      })
+    ):('No videos available please record one and save it')}
   </div>
   </>
 );
