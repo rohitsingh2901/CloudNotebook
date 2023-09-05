@@ -5,12 +5,10 @@ const VideoPlayer = ({ recordedChunks }) => {
 
     
   return (
-    <div className='my-3 mx-3'>
-      <div style={{ width: "100vw", height: "20vw" }}>
+    <div className=' w-100 flex justify-center'>
         {
-          recordedChunks[0] ? (<video className='w-25 h-75' loop controls poster="playButton.png"  src={URL.createObjectURL(recordedChunks[0])}></video>):('')
+          recordedChunks[0] ? (<video id='videoPlayer' className='w-25 rounded-2xl border-solid border-8 border-orange-500 ' loop controls poster="playButton.png"  src={URL.createObjectURL(recordedChunks[0])}></video>):('')
         }
-      </div>
     </div>
   );
 };

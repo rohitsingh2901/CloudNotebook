@@ -118,6 +118,7 @@ import VideoPlayer from './VideoPlayer';
 
 return (
   <>
+  <div className='flex  flex-col items-center'>
     <div>
       <button onClick={() => setShowCam(true)} className='mx-4 text-black font-medium  bg-green-600 btn-sm'>Open Camera</button>
       <button onClick={() => setShowCam(false)} className='mx-4 text-white font-medium  bg-red-600 btn-sm'>Close Camera</button>
@@ -132,17 +133,22 @@ return (
         </>
       )}
     </div>
-    {showCam ? (<div><Webcam className='border-solid border-8 border-red-500 mx-3 w-25'  audio={false} ref={webcamRef} /></div>) : ('')}
+    <h3 className='my-3'>Input</h3>
+    {showCam ? (<div className="flex justify-center"><Webcam className='rounded-2xl border-solid border-8 border-red-500 mx-3 w-50'  audio={false} ref={webcamRef} /></div>) : ('')}
+    <h3 className='my-3'>Output</h3>
+    {<VideoPlayer recordedChunks={recordedChunks} />}
     {recordedChunks.length > 0 && (
       <>
-        <h3>Heading</h3>
+        <h3 className='my-3'>Heading</h3>
         <form onSubmit={handleSave}>
-          <input  value={heading} onChange={(e) => setHeading(e.target.value) } type="text" className="form-control w-25" placeholder="My heading" />
-          <button  type='submit' className='text-black font-medium  bg-green-600 btn-sm'>Save</button>
+          <div className='flex justify-center items-center flex-col'>
+          <input  value={heading} onChange={(e) => setHeading(e.target.value) } type="text" className="form-control" placeholder="My heading" />
+          <button  type='submit' className='text-black font-medium mt-3 bg-green-600 btn-sm'>Save</button>
+          </div>
         </form>
       </>
     )}
-    {<VideoPlayer recordedChunks={recordedChunks} />}
+  </div>
   </>
 );
 

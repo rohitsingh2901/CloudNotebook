@@ -67,3 +67,8 @@ nav img:hover{
 .GirlImg{
   scale: 0.6;
 }
+
+#videoPlayer{
+  width: 100px;
+  height: 289px;
+}
