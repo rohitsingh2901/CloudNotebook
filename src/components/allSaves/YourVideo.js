@@ -156,7 +156,7 @@ return (
         <h3 className='my-3'>Heading</h3>
         <form onSubmit={handleSave}>
           <div className='flex justify-center items-center flex-col'>
-          <input  value={heading} onChange={(e) => setHeading(e.target.value) } type="text" className="form-control" placeholder="My heading" />
+          <input required  value={heading} onChange={(e) => setHeading(e.target.value) } type="text" className="form-control" placeholder="My heading" />
           <button  type='submit' className='text-black font-medium mt-3 bg-green-600 btn-sm'>Save</button>
           </div>
         </form>

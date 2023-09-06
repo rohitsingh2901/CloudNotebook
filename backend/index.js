@@ -23,6 +23,7 @@ app.listen(port, () => {
 app.use('/',require('./routes/auth'))
 app.use('/',require('./routes/notes'))
 app.use('/',require('./routes/audio'))
+app.use('/',require('./routes/location'))
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 
