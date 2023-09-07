@@ -4,7 +4,7 @@ import WorldMap from './world map/WorldMap';
 const GeoNotes = () => {
   return (
     <div>
-      <h1>World Map</h1>
+      <h1 className='font-extrabold text-center'>World Map</h1>
       <WorldMap />
     </div>
   );

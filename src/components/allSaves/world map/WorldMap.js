@@ -33,6 +33,7 @@ const WorldMap = () => {
       .then((data) => {
         setTaggedLocations([...taggedLocations, data]);
         handleClose();
+        fetchLocations();
       })
       .catch((error) => {
         console.error(error);
@@ -45,7 +46,7 @@ const WorldMap = () => {
 
     // Add a tile layer (you can use different tile providers)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      
     }).addTo(newMap);
 
     // Store the map instance in the state
@@ -57,6 +58,13 @@ const WorldMap = () => {
     };
   }, []); // Empty dependency array to run this effect only once
 
+  const myIcon = L.icon({
+    iconUrl: '/location.png',
+    iconSize: [20,20],
+    iconAnchor: [19, 38],
+    popupAnchor: [-10, -30]
+  });
+
   const handleMapContextMenu = (e) => {
     // Check if a marker already exists, and remove it
     if (map) {
@@ -65,7 +73,7 @@ const WorldMap = () => {
       }
       const { latlng } = e;
       // Create a new marker at the clicked location
-      const newMarker = L.marker(latlng).addTo(map);
+      const newMarker = L.marker(latlng,{icon: myIcon}).addTo(map);
       setMarker(newMarker);
       
       // Set latitude and longitude in form data
@@ -80,13 +88,27 @@ const WorldMap = () => {
     }
   };
 
+  const fetchLocations = () => {
+    fetch('http://localhost:5000/locations', {
+        method: "GET"
+    })
+    .then(async (res) => {
+      setTaggedLocations(await res.json())
+      
+    })
+    .catch((error) => console.log(error))
+    
+}
+
+ 
+
   useEffect(() => {
+
+    fetchLocations();
+
     // Attach contextmenu (right-click) event listener to the map
     if (map) {
       map.on('contextmenu', handleMapContextMenu);
-      if(marker){
-        marker.bindPopup('User-set marker').openPopup();
-      }
     }
 
     return () => {
@@ -95,20 +117,33 @@ const WorldMap = () => {
         map.off('contextmenu', handleMapContextMenu);
       }
     };
+    // eslint-disable-next-line
   }, [map, formData]); // Dependency array includes map and formData
 
-  return (
-    <div>
-      
+  useEffect(() => {
+    for (let index = 0; index < taggedLocations.length; index++) {
+      const element = taggedLocations[index];
+      const latlng = {
+        lat : element.latitude,
+        lng: element.longitude
+      }
+      L.marker(latlng,{icon:myIcon}).addTo(map).bindPopup(element.name)   ;
+    }
+    // eslint-disable-next-line
+}, [taggedLocations]);
 
+
+  return (
+    <div className='container'>
+    
       <Modal show={showModal} onHide={handleClose}>
       <Modal.Header closeButton>
           <Modal.Title>Enter Location Details</Modal.Title>
-        </Modal.Header>
+      </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group controlId="name">
-              <Form.Label>Name</Form.Label>
+              <Form.Label>Location Name</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Enter name"
@@ -138,15 +173,24 @@ const WorldMap = () => {
         </Modal.Footer>
       </Modal>
 
-      <div id="world-map" style={{ width: '50%', height: '400px' }} />
-      <h2>Tagged Locations:</h2>
-      <ul>
+      <div id="world-map" style={{ width: '100%', height: '400px',border:"2px solid black", borderRadius:"20px" }} />
+      <h2 className='text-center'>Tagged Locations:</h2>
+      <table className='w-100'>
+          <tr>
+            <th className='text-center col-6'>Location</th>
+            <th className='text-center col-6'>Description</th>
+          </tr>
         {taggedLocations.map((location, index) => (
-          <li key={index}>
-            Name: {location.name}, Description: {location.description}, Latitude: {location.latitude}, Longitude: {location.longitude}
-          </li>
+          <tr>
+          <td key={index}>
+            {location.name}
+          </td>
+          <td key={index}>
+            {location.description}
+          </td>
+          </tr>
         ))}
-      </ul>
+        </table>
     </div>
   );
 };
