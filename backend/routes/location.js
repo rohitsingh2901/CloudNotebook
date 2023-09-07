@@ -26,5 +26,15 @@ route.post('/locations', async (req, res) => {
     }
   });
 
+  route.delete('/delete-location/:index', async (req, res) => {
+    const {index} = req.params;
+    try {
+      const locations = await Location.findByIdAndDelete(index);
+      res.status(200).json(locations);
+    } catch (error) {
+      res.status(500).json({ error: 'Could not delete locations' });
+    }
+  });
+
 
  module.exports = route;
