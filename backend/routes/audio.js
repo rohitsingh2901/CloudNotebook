@@ -129,5 +129,29 @@ const upload2 = multer({ storage: storage2 });
       res.status(500).json({ error: 'Failed to delete audio.' });
     }
   });
+  route.delete('/deletevideo/:fileName', async (req, res) => {
+    try {
+      const { fileName } = req.params;
+  
+      // Find the audio record in the database
+      const audio = await VideoModel.findOne({ fileName: fileName });
+  
+      if (!audio) {
+        return res.status(404).json({ error: 'Video not found.' });
+      }
+  
+      // Remove the audio record from the database
+      await audio.deleteOne();
+  
+      // Delete the audio file from the server's storage
+      const filePath = path.join(__dirname, '../../', 'uploads', fileName);
+      fs.unlinkSync(filePath);
+  
+      res.status(200).json({ message: 'Video deleted successfully.' });
+    } catch (error) {
+      console.error('Error deleting video:', error);
+      res.status(500).json({ error: 'Failed to delete video.' });
+    }
+  });
 
   module.exports = route;

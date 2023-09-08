@@ -44,22 +44,6 @@ import VideoPlayer from './VideoPlayer';
       setCapturing(false);
     }, [mediaRecorderRef, setCapturing]);
 
-    // const handleDownload = React.useCallback(() => {
-    //   if (recordedChunks.length) {
-    //     const blob = new Blob(recordedChunks, {
-    //       type: "video/webm"
-    //     });
-    //     const url = URL.createObjectURL(blob);
-    //     const a = document.createElement("a");
-    //     document.body.appendChild(a);
-    //     a.style = "display: none";
-    //     a.href = url;
-    //     a.download = "react-webcam-stream-capture.webm";
-    //     a.click();
-    //     window.URL.revokeObjectURL(url);
-    //     setRecordedChunks([]);
-    //   }
-    // }, [recordedChunks]);
 
     const handleSave = async (event) => {
       event.preventDefault()
@@ -88,6 +72,7 @@ import VideoPlayer from './VideoPlayer';
           console.log('Video saved successfully!');
           const res = await response.json();
           console.log(res);
+          setRecordedChunks([]);
         } else {
           console.error('Failed to save video.');
         }
@@ -130,6 +115,17 @@ import VideoPlayer from './VideoPlayer';
       // eslint-disable-next-line
     }, [])
     
+    const deleteVideo = (id) =>{
+      fetch(`http://localhost:5000/deletevideo/${yourVideos[id].fileName}`, {
+      method: "DELETE",
+    })
+      .then((res) => {
+        console.log(res);
+        fetchVideos();
+      })
+      .catch((error) => console.log("Some error occcured.."));
+    }
+    
 
 return (
   <>
@@ -150,7 +146,7 @@ return (
     </div>
     {showCam && <h3 className='my-3'>Input</h3>}
     {showCam ? (<div className="flex justify-center"><Webcam className='rounded-2xl border-solid border-8 border-red-500 mx-3 w-50'  audio={false} ref={webcamRef} /></div>) : ('')}
-    {<VideoPlayer recordedChunks={recordedChunks} />}
+    {<VideoPlayer recordedChunks={recordedChunks} setRecordedChunks={setRecordedChunks} />}
     {recordedChunks.length > 0 && (
       <>
         <h3 className='my-3'>Heading</h3>
@@ -164,24 +160,34 @@ return (
     )}
   </div>
   <div>
-    <h1>Your Videos</h1>
+    <h1 className='text-center'>Your Videos</h1>
     {yourVideos[0] ? (
-      yourVideos.map((v,i)=>{
+      yourVideos.map((v,idx)=>{
         // const audio = document.createElement("video");
         //     audio.src = v.fileName;
         //     audio.downloadFileExtension = "webm";
         //     audio.controls = true;
         return(
-          <div key={i} className='flex items-center'>
-          <div className='w-25 flex justify-center'>
-            <h4 className='font-bold'>{i+1}.</h4>
+          <div key={idx} className=' flex items-center justify-center'>
+          <div className='flex w-25'>
+            <h4 className='font-bold'>{idx+1}.</h4>
             <h4>&nbsp;&nbsp;{v.heading}</h4>
           </div>
           <video  id='videoPlayer' className='w-25 rounded-2xl border-solid border-8 border-orange-500 hover: cursor-pointer' loop controls poster="playButton.png"  src={"http://localhost:5000/uploads/"+v.fileName}></video>
+          <i
+                  onClick={() =>deleteVideo(idx)}
+                  className="fa-solid fa-trash-can w-25"
+                  style={{
+                    color: "#ff0000",
+                    display: "flex",
+                    justifyContent: "center",
+                    fontSize : "30px"
+                  }}
+                ></i>
           </div>
         )
       })
-    ):('No videos available please record one and save it')}
+    ):(<p className='text-center'>No videos available please record one and save it</p>)}
   </div>
   </>
 );
