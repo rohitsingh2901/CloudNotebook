@@ -4,6 +4,7 @@ import YourAudio from "./allSaves/YourAudio";
 import YourVideo from "./allSaves/YourVideo";
 import YourImage from "./allSaves/YourImage";
 import GeoNotes from "./allSaves/GeoNotes";
+import AllCards from "./allSaves/AllCards";
 
 const Saves = (props) => {
   const [show, setShow] = useState(null)
@@ -27,7 +28,7 @@ const Saves = (props) => {
       setShow(<YourNotes/>);  
     }
     else if(indx===7){
-      setShow(<YourNotes/>);  
+      setShow(<AllCards/>);  
     }
     else if(indx===8){
       setShow(<GeoNotes/>);  
