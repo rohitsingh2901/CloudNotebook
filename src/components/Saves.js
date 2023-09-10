@@ -5,6 +5,7 @@ import YourVideo from "./allSaves/YourVideo";
 import YourImage from "./allSaves/YourImage";
 import GeoNotes from "./allSaves/GeoNotes";
 import AllCards from "./allSaves/AllCards";
+import Links from "./allSaves/Links";
 
 const Saves = (props) => {
   const [show, setShow] = useState(null)
@@ -19,7 +20,7 @@ const Saves = (props) => {
       setShow(<YourVideo/>);  
     }
     else if(indx===4){
-      setShow(<YourNotes/>);  
+      setShow(<Links/>);  
     }
     else if(indx===5){
       setShow(<YourImage/>);  
