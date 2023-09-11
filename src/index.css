@@ -116,3 +116,9 @@ th{
     width: 90vw;
   }
 }
+
+#imgDiv{
+  width: 20vw;
+  height: auto;
+  aspect-ratio: 3/2;
+}
