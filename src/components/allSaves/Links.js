@@ -4,6 +4,7 @@ import axios from 'axios';
 const Links = () => {
   const [linkData, setLinkData] = useState([]);
   const [inputUrl, setInputUrl] = useState('');
+  const [loader, setloader] = useState(false)
 
   const fetchLinkPreview = async (url) => {
     try {
@@ -14,11 +15,14 @@ const Links = () => {
     } catch (error) {
       console.error('Error fetching link preview:', error);
       return null;
+    } finally{
+      setloader(false);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setloader(true);
     const data = await fetchLinkPreview(inputUrl);
     console.log(data)
      const sendData = {
@@ -99,16 +103,16 @@ const Links = () => {
         )} */}
         <div>
           <h1 className='text-center my-3'>Your Links</h1>
-          <div className='flex justify-between flex-wrap'>
+          <div className="flex justify-center flex-wrap">
             {
-              linkData.length!==0 && linkData.map((link,id)=>{
+              linkData.length!==0 && loader===false ? (linkData.map((link,id)=>{
                 return (
-                  <div key={id}>
+                  <div className='mx-6' key={id}>
                     <div id='imgDiv'>
                       <h5>{link.title.length>30 ? link.title.substr(0,30)+'...':link.title}</h5>
-                      <img className='w-100 h-100' src={link.imgurl} alt='imgUrl'/>
+                      <img className='w-100 h-100 rounded-2xl border-double border-4 border-black' src={link.imgurl} alt='imgUrl'/>
                       <div className='flex justify-evenly items-center'>
-                      <p className="font-bold"><a target='_blank' rel="noopener noreferrer" href={link.url}>Link</a></p>
+                      <p className="font-bold"><a target='_blank' rel="noopener noreferrer" href={link.url}>Link<i class="fa-solid fa-up-right-from-square fa-sm"></i></a></p>
                       <p><i
                   onClick={() => {deleteLink(id)}}
                   className="fa-solid fa-trash-can"
@@ -121,7 +125,10 @@ const Links = () => {
                     </div>
                   </div>
                 )
-              })
+              })):(linkData.length!==0 ? (<div className="flex flex-col justify-center items-center my-4">
+              <div className="loader "></div>
+              <h5>Please Wait</h5>
+              </div>):(<h6 className='text-center font-bold'>Add your first link</h6>))
             }
           </div>
         </div>
