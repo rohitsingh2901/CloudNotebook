@@ -6,6 +6,7 @@ import YourImage from "./allSaves/YourImage";
 import GeoNotes from "./allSaves/GeoNotes";
 import AllCards from "./allSaves/AllCards";
 import Links from "./allSaves/Links";
+import MyCalendar from "./allSaves/calendar/calendar";
 
 const Saves = (props) => {
   const [show, setShow] = useState(null)
@@ -26,7 +27,7 @@ const Saves = (props) => {
       setShow(<YourImage/>);  
     }
     else if(indx===6){
-      setShow(<YourNotes/>);  
+      setShow(<MyCalendar/>);  
     }
     else if(indx===7){
       setShow(<AllCards/>);  
