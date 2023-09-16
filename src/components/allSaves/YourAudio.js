@@ -195,25 +195,11 @@ export default function YourAudio() {
     }
   };
   const handleUpload = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("audioFile", file);
-      formData.append("name", data.Name);
-      formData.append("email", data.Email);
-      formData.append("id", data._id);
-      formData.append("heading", "Uploaded audio");
-      const response = await fetch("http://localhost:5000/upload-audio", {
-          method: "POST",
-          body: formData,
-        });
-        if(response.ok){
-          console.log("Audio saved successfully");
-        } else {
-          console.error("Failed to save audio.");
-        }
-      
-    } catch (error) {
-      console.error("Error saving audio:", error);
+    if(file){
+      addAudioElement(file);
+    }
+    else{
+      return;
     }
     
   };
@@ -306,7 +292,7 @@ export default function YourAudio() {
     <>
       <div className="row">
         <div
-          className="container my-24 flex justify-center items-center col-6"
+          className="container mt-24 flex justify-center items-center col-6"
           style={{
             display: "flex",
             justifyContent: "center",
@@ -343,7 +329,25 @@ export default function YourAudio() {
             </button>
           </div>
 
-          {check ? (
+          
+
+          
+        </div>
+        <div className="col-6 container flex justify-center items-center">
+          <div className="mt-32">
+            <input type="file" accept="audio/*" onChange={handleFileChange} />
+            <button
+              className="mx-4 text-black font-medium  bg-green-600 btn-sm"
+              onClick={handleUpload}
+            >
+              Upload
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div className="container flex justify-center items-center flex-col mb-8 h-48">
+      {check ? (
             <>
               <h3 className="font-bold mb-3">Heading</h3>
               <div className="input-group w-25">
@@ -362,22 +366,8 @@ export default function YourAudio() {
               </div>
             </>
           ) : null}
-
           <div className="" id="showAudio"></div>
-        </div>
-        <div className="col-6 container flex justify-center items-center">
-          <div>
-            <input type="file" accept="audio/*" onChange={handleFileChange} />
-            <button
-              className="mx-4 text-black font-medium  bg-green-600 btn-sm"
-              onClick={handleUpload}
-            >
-              Upload
-            </button>
-          </div>
-        </div>
       </div>
-
       <div className="container">
         <h1 className="todo">Your Audios</h1>
         <div className="" id="showAudio2"></div>
