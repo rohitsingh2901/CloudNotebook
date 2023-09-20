@@ -11,6 +11,7 @@ import VideoPlayer from './VideoPlayer';
     const [data, setData] = React.useState({})
     const [heading, setHeading] = React.useState('')
     const [yourVideos, setYourVideos] = React.useState([])
+    const [file, setFile] = React.useState(null);
 
     const handleDataAvailable = React.useCallback(
       ({ data }) => {
@@ -125,40 +126,74 @@ import VideoPlayer from './VideoPlayer';
       })
       .catch((error) => console.log("Some error occcured.."));
     }
-    
+
+    const handleFileChange = (event) => {
+      setFile(event.target.files[0]);
+    };
+
+    const handleUpload = async () => {
+      if(file){
+        if(recordedChunks.length){
+          return;
+        }
+        setRecordedChunks([file]);
+      }
+      else{
+        return;
+      }
+    }
+  
 
 return (
   <>
-  <div className='flex  flex-col items-center'>
-    <div>
-      <button onClick={() => setShowCam(true)} className='mx-4 text-black font-medium  bg-green-600 btn-sm'>Open Camera</button>
-      <button onClick={() => setShowCam(false)} className='mx-4 text-white font-medium  bg-red-600 btn-sm'>Close Camera</button>
+  <div className='row' style={{minHeight:"20vw"}}>
+    <div className='flex col-6 flex-col items-center justify-center'>
+      <div>
+        <button onClick={() => setShowCam(true)} className='mx-4 text-black font-medium  bg-green-600 btn-sm'>Open Camera</button>
+        <button capturing onClick={() => { if(capturing===true){return;} setShowCam(false)}} className={`mx-4 text-white font-medium ${capturing ? 'hover: cursor-not-allowed':''} bg-red-600 btn-sm`}>Close Camera</button>
+      </div>
+      <div className='mx-10 my-3'>
+        {capturing ? (
+          <button className='mx-4 text-white font-medium  bg-red-600 btn-lg' onClick={handleStopCaptureClick}>Stop Capture</button>
+        ) : (
+          <>
+            <button title={showCam === true ? '' : 'Open camera first'} disabled={showCam === true ? false : true} className={`mx-4 text-black font-medium  bg-green-600 btn-lg ${showCam === false ? "cursor-not-allowed	" : ""}`} onClick={handleStartCaptureClick}>Start Capture</button>
+            <span></span>
+          </>
+        )}
+      </div>
+      
     </div>
-    <div className='mx-10 my-3'>
-      {capturing ? (
-        <button className='mx-4 text-white font-medium  bg-red-600 btn-lg' onClick={handleStopCaptureClick}>Stop Capture</button>
-      ) : (
+    <div className="col-6 container flex justify-center items-center">
+          <div className="">
+            <input type="file" accept="video/*" onChange={handleFileChange} />
+            <button
+              className="mx-4 text-black font-medium  bg-green-600 btn-sm"
+              onClick={handleUpload}
+            >
+              Upload
+            </button>
+          </div>
+        </div>
+  </div>
+  <div className='container'>
+  {showCam && <h3 className='my-3'>Input</h3>}
+        {showCam ? (<div className="flex justify-center"><Webcam className='rounded-2xl border-solid border-8 border-red-500 mx-3 w-50'  audio={false} ref={webcamRef} /></div>) : ('')}
+        {<VideoPlayer recordedChunks={recordedChunks} setRecordedChunks={setRecordedChunks} />}
+
+      {recordedChunks.length > 0 && (
         <>
-          <button title={showCam === true ? '' : 'Open camera first'} disabled={showCam === true ? false : true} className={`mx-4 text-black font-medium  bg-green-600 btn-lg ${showCam === false ? "cursor-not-allowed	" : ""}`} onClick={handleStartCaptureClick}>Start Capture</button>
-          <span></span>
+          <h3 className='my-3'>Heading</h3>
+          <form onSubmit={handleSave}>
+            <div className='flex justify-center items-center flex-col'>
+            <input required  value={heading} onChange={(e) => setHeading(e.target.value) } type="text" className="form-control" placeholder="My heading" />
+            <button  type='submit' className='text-black font-medium mt-3 bg-green-600 btn-sm'>Save</button>
+            </div>
+          </form>
         </>
       )}
-    </div>
-    {showCam && <h3 className='my-3'>Input</h3>}
-    {showCam ? (<div className="flex justify-center"><Webcam className='rounded-2xl border-solid border-8 border-red-500 mx-3 w-50'  audio={false} ref={webcamRef} /></div>) : ('')}
-    {<VideoPlayer recordedChunks={recordedChunks} setRecordedChunks={setRecordedChunks} />}
-    {recordedChunks.length > 0 && (
-      <>
-        <h3 className='my-3'>Heading</h3>
-        <form onSubmit={handleSave}>
-          <div className='flex justify-center items-center flex-col'>
-          <input required  value={heading} onChange={(e) => setHeading(e.target.value) } type="text" className="form-control" placeholder="My heading" />
-          <button  type='submit' className='text-black font-medium mt-3 bg-green-600 btn-sm'>Save</button>
-          </div>
-        </form>
-      </>
-    )}
   </div>
+
   <div>
     <h1 className='text-center'>Your Videos</h1>
     {yourVideos[0] ? (
@@ -173,7 +208,7 @@ return (
             <h4 className='font-bold'>{idx+1}.</h4>
             <h4>&nbsp;&nbsp;{v.heading}</h4>
           </div>
-          <video  id='videoPlayer' className='w-25 rounded-2xl border-solid border-8 border-orange-500 hover: cursor-pointer' loop controls poster="playButton.png"  src={"http://localhost:5000/uploads/"+v.fileName}></video>
+          <video id='videoPlayerShow' className='w-25 rounded-2xl border-solid border-8 border-orange-500 hover: cursor-pointer' loop controls poster="playButton.png"  src={"http://localhost:5000/uploads/"+v.fileName}></video>
           <i
                   onClick={() =>deleteVideo(idx)}
                   className="fa-solid fa-trash-can w-25"

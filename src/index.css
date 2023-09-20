@@ -71,7 +71,11 @@ nav img:hover{
 
 #videoPlayer{
   width: 100px;
-  height: 289px;
+  height: 420px;
+}
+#videoPlayerShow{
+  width: 100px;
+  height: 288px;
 }
 table, th, td {
   border:2px solid rgb(0, 0, 0);
