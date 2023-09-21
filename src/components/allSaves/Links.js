@@ -25,9 +25,13 @@ const Links = () => {
     setloader(true);
     const data = await fetchLinkPreview(inputUrl);
     console.log(data)
+    const img = "Link.jfif"
+    if(data.data.image){
+      img = data.data.image.url;
+    }
      const sendData = {
       url: data.data.url,
-      imgurl: data.data.image.url,
+      imgurl: img,
       title: data.data.title,
      }
      fetch('http://localhost:5000/get-links',{
@@ -112,7 +116,7 @@ const Links = () => {
                       <h5>{link.title.length>30 ? link.title.substr(0,30)+'...':link.title}</h5>
                       <img className='w-100 h-100 rounded-2xl border-double border-4 border-black' src={link.imgurl} alt='imgUrl'/>
                       <div className='flex justify-evenly items-center'>
-                      <p className="font-bold"><a target='_blank' rel="noopener noreferrer" href={link.url}>Link<i class="fa-solid fa-up-right-from-square fa-sm"></i></a></p>
+                      <p className="font-bold"><a target='_blank' rel="noopener noreferrer" href={link.url}>Link <i class="fa-solid fa-up-right-from-square fa-xs"></i></a></p>
                       <p><i
                   onClick={() => {deleteLink(id)}}
                   className="fa-solid fa-trash-can"

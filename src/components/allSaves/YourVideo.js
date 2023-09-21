@@ -168,7 +168,7 @@ return (
           <div className="">
             <input type="file" accept="video/*" onChange={handleFileChange} />
             <button
-              className="mx-4 text-black font-medium  bg-green-600 btn-sm"
+              className={`mx-4 text-black font-medium  bg-green-600 btn-sm ${recordedChunks.length ? 'hover: cursor-not-allowed' : ''}`}
               onClick={handleUpload}
             >
               Upload
@@ -183,11 +183,11 @@ return (
 
       {recordedChunks.length > 0 && (
         <>
-          <h3 className='my-3'>Heading</h3>
+          <h3 className='mt-8 text-center'>Heading</h3>
           <form onSubmit={handleSave}>
             <div className='flex justify-center items-center flex-col'>
-            <input required  value={heading} onChange={(e) => setHeading(e.target.value) } type="text" className="form-control" placeholder="My heading" />
-            <button  type='submit' className='text-black font-medium mt-3 bg-green-600 btn-sm'>Save</button>
+            <input required  value={heading} onChange={(e) => setHeading(e.target.value) } type="text" className="form-control w-50" placeholder="My heading" />
+            <button  type='submit' className='text-black font-medium mb-8 mt-2 bg-green-600 btn-sm'>Save</button>
             </div>
           </form>
         </>
