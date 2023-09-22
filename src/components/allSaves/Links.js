@@ -25,7 +25,7 @@ const Links = () => {
     setloader(true);
     const data = await fetchLinkPreview(inputUrl);
     console.log(data)
-    const img = "Link.jfif"
+    let img = "Link.jfif"
     if(data.data.image){
       img = data.data.image.url;
     }
@@ -113,7 +113,7 @@ const Links = () => {
                 return (
                   <div className='mx-6' key={id}>
                     <div id='imgDiv'>
-                      <h5>{link.title.length>30 ? link.title.substr(0,30)+'...':link.title}</h5>
+                      <h5 className='text-center'>{link.title.length>30 ? link.title.substr(0,30)+'...':link.title}</h5>
                       <img className='w-100 h-100 rounded-2xl border-double border-4 border-black' src={link.imgurl} alt='imgUrl'/>
                       <div className='flex justify-evenly items-center'>
                       <p className="font-bold"><a target='_blank' rel="noopener noreferrer" href={link.url}>Link <i class="fa-solid fa-up-right-from-square fa-xs"></i></a></p>
