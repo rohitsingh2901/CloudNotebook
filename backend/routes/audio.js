@@ -7,6 +7,7 @@ const fs = require('fs');
 // const fetchUser = require('../Middleware/fetchUser')
 const AudioModel = require('../models/Audio')
 const VideoModel = require('../models/Video')
+const ImageModel = require('../models/Image')
 const multer = require('multer');
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -26,6 +27,15 @@ const storage2 = multer.diskStorage({
   },
 });
 const upload2 = multer({ storage: storage2 });
+const storage3 = multer.diskStorage({ 
+  destination: function (req, file, cb) {
+    cb(null, 'uploads'); // Specify the destination directory for uploaded files
+  },
+  filename: function (req, file, cb) {
+    cb(null, 'imageFile-' + Date.now() + '-' + Math.random() +  path.extname(file.originalname)); // Generate a unique file name for the uploaded audio file
+  },
+});
+const upload3 = multer({ storage: storage3 });
 
 
   route.post('/upload-audio', upload.single('audioFile'), async (req, res) => {
@@ -84,6 +94,34 @@ const upload2 = multer({ storage: storage2 });
       res.status(500).json({ error: 'Failed to save video.' });
     }
   });
+  route.post('/upload-image', upload3.single('imageFile'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No image file received.' });
+      }
+  
+      const { filename, originalname, mimetype } = req.file;
+      const {name,email,id,heading} = req.body;
+      // Create a new instance of the videoModel
+      const newImage = new ImageModel({
+        fileName: filename,
+        originalName: originalname,
+        mimeType: mimetype,
+        name: name,
+        email: email,
+        id: id,
+        heading:heading,
+      });
+  
+      // Save the audio metadata to MongoDB
+      await newImage.save();
+      console.log(newImage)
+      res.status(200).json({ message: 'Image saved successfully.',filename:filename });
+    } catch (error) {
+      console.error('Error saving Image:', error);
+      res.status(500).json({ error: 'Failed to save Image.' });
+    }
+  });
   
   route.post('/getaudio', async (req, res) => {
     try {
@@ -99,6 +137,15 @@ const upload2 = multer({ storage: storage2 });
     try {
       const id = req.body.id; 
       const users = await VideoModel.find(id);
+      res.json(users);
+    } catch (error) {
+      res.status(500).json({ error: 'Server error' });
+    }
+  });
+  route.post('/getImages', async (req, res) => {
+    try {
+      const id = req.body.id; 
+      const users = await ImageModel.find(id);
       res.json(users);
     } catch (error) {
       res.status(500).json({ error: 'Server error' });
@@ -151,6 +198,30 @@ const upload2 = multer({ storage: storage2 });
     } catch (error) {
       console.error('Error deleting video:', error);
       res.status(500).json({ error: 'Failed to delete video.' });
+    }
+  });
+  route.delete('/deleteAudio/:fileName', async (req, res) => {
+    try {
+      const { fileName } = req.params;
+  
+      // Find the audio record in the database
+      const audio = await ImageModel.findOne({ fileName: fileName });
+  
+      if (!audio) {
+        return res.status(404).json({ error: 'Video not found.' });
+      }
+  
+      // Remove the audio record from the database
+      await audio.deleteOne();
+  
+      // Delete the audio file from the server's storage
+      const filePath = path.join(__dirname, '../../', 'uploads', fileName);
+      fs.unlinkSync(filePath);
+  
+      res.status(200).json({ message: 'Image deleted successfully.' });
+    } catch (error) {
+      console.error('Error deleting Image:', error);
+      res.status(500).json({ error: 'Failed to delete Image.' });
     }
   });
 
