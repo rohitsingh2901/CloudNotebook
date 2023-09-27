@@ -32,7 +32,7 @@ const storage3 = multer.diskStorage({
     cb(null, 'uploads'); // Specify the destination directory for uploaded files
   },
   filename: function (req, file, cb) {
-    cb(null, 'imageFile-' + Date.now() + '-' + Math.random() +  path.extname(file.originalname)); // Generate a unique file name for the uploaded audio file
+    cb(null, 'imageFile-' + Date.now() + '-' + Math.random() +  path.extname(file.mimetype)); // Generate a unique file name for the uploaded audio file
   },
 });
 const upload3 = multer({ storage: storage3 });
@@ -200,19 +200,19 @@ const upload3 = multer({ storage: storage3 });
       res.status(500).json({ error: 'Failed to delete video.' });
     }
   });
-  route.delete('/deleteAudio/:fileName', async (req, res) => {
+  route.delete('/deleteImage/:fileName', async (req, res) => {
     try {
       const { fileName } = req.params;
   
       // Find the audio record in the database
-      const audio = await ImageModel.findOne({ fileName: fileName });
+      const img = await ImageModel.findOne({ fileName: fileName });
   
-      if (!audio) {
-        return res.status(404).json({ error: 'Video not found.' });
+      if (!img) {
+        return res.status(404).json({ error: 'Image not found.' });
       }
   
       // Remove the audio record from the database
-      await audio.deleteOne();
+      await img.deleteOne();
   
       // Delete the audio file from the server's storage
       const filePath = path.join(__dirname, '../../', 'uploads', fileName);
