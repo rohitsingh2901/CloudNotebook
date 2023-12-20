@@ -9,9 +9,14 @@ const Links = () => {
   const fetchLinkPreview = async (url) => {
     try {
       const response = await axios.get(`https://api.microlink.io?url=${encodeURIComponent(url)}`);
-      const data = response.data;
-      console.log(data)
-      return data;
+      if(response){
+        const data = response.data;
+        console.log(data)
+        return data;
+      }
+      else{
+        return "";
+      }
     } catch (error) {
       console.error('Error fetching link preview:', error);
       return null;

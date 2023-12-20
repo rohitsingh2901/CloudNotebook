@@ -31,6 +31,7 @@ const EventForm = ({ selectedEvent, onAddEvent, onClose }) => {
       <form onSubmit={handleSubmit}>
         <label>Title:</label>
         <input
+          class="form-control w-25"
           type="text"
           value={event.title}
           onChange={(e) => setEvent({ ...event, title: e.target.value })}
@@ -38,6 +39,7 @@ const EventForm = ({ selectedEvent, onAddEvent, onClose }) => {
 
         <label>Start Date and Time:</label>
         <input
+        class="form-control w-25"
           type="datetime-local"
           value={moment(event.start).format('YYYY-MM-DDTHH:mm')}
           onChange={(e) =>
@@ -47,13 +49,14 @@ const EventForm = ({ selectedEvent, onAddEvent, onClose }) => {
 
         <label>End Date and Time:</label>
         <input
+        class="form-control w-25"
           type="datetime-local"
           value={moment(event.end).format('YYYY-MM-DDTHH:mm')}
           onChange={(e) => setEvent({ ...event, end: new Date(e.target.value) })}
         />
 
         <div>
-          <button type="submit">{selectedEvent ? 'Update' : 'Add'}</button>
+          <button className='btn my-3' type="submit">{selectedEvent ? 'Update' : 'Add'}</button>
           {selectedEvent && (
             <button type="button" onClick={onClose}>
               Cancel

@@ -7,6 +7,7 @@ const YourImage= () => {
   const [imgSrc, setImgSrc] = useState(null);
   const [file, setFile] = useState(null);
   const [showCam, setShowCam] = useState(false);
+  const [checkImg, setCheckImg] = useState(false);
   const [heading, setHeading] = useState('');
   const [data, setData] = React.useState({})
   const [Images, setImages] = React.useState([])
@@ -19,17 +20,25 @@ const YourImage= () => {
   }, [webcamRef,showCam]);
 
   const dataURLtoBlob = (dataURL) => {
-    const parts = dataURL.split(';base64,');
-    // eslint-disable-next-line
-    const contentType = parts[0].split(':')[1];
-    const raw = window.atob(parts[1]);
-    const rawLength = raw.length;
-    const uInt8Array = new Uint8Array(rawLength);
-
-    for (let i = 0; i < rawLength; ++i) {
-      uInt8Array[i] = raw.charCodeAt(i);
+    if(dataURL.indexOf('base64')>-1){
+      setCheckImg(false)
+      const parts = dataURL.split(';base64,');
+      console.log(parts)
+      // eslint-disable-next-line
+      const contentType = parts[0].split(':')[1];
+      const raw = window.atob(parts[1]);
+      const rawLength = raw.length;
+      const uInt8Array = new Uint8Array(rawLength);
+  
+      for (let i = 0; i < rawLength; ++i) {
+        uInt8Array[i] = raw.charCodeAt(i);
+      }
+      return new Blob([uInt8Array], { type: 'image/png' });
     }
-    return new Blob([uInt8Array], { type: 'image/png' });
+    else{
+      setCheckImg(true)
+      return new Blob([dataURL], { type: 'image/png' });
+    }
   };
 
   const handleSubmit = async(e) =>{
@@ -50,6 +59,9 @@ const YourImage= () => {
         formData.append('email', data.Email);
         formData.append('id', data._id);
         formData.append('heading', heading);
+        for (const key of formData.keys()) {
+          console.log(key, formData.get(key));
+        }
       const response = await fetch('http://localhost:5000/upload-image', {
           method: 'POST',
           body: formData,
@@ -119,7 +131,6 @@ const YourImage= () => {
     } catch (error) {
       console.error("An error occurred while deleting image:", error);
     }
-    
     
   }
 
@@ -200,10 +211,11 @@ const YourImage= () => {
                   console.log(img)
                   return(
                     <>
-                    <img height={300} width={300} key={indx}  src={"http://localhost:5000/uploads/"+img.fileName} alt="webcam" />
+                    <h5>{img.headin}</h5>
+                    <img height={300} width={300} key={indx}  src={checkImg ?  `${imgSrc}`:"http://localhost:5000/uploads/"+img.fileName} alt="webcam" />
                     <i
                   onClick={() => {deleteImage(indx)}}
-                  className="fa-solid fa-trash-can mt-2"
+                  className="fa-solid fa-trash-can mt-2 mb-8"
                   style={{
                     color: "#ff0000",
                   }}
