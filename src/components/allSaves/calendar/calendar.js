@@ -38,6 +38,8 @@ const MyCalendar = () => {
         selectedEvent={selectedEvent}
         onAddEvent={handleEventAdd}
         onClose={handleEventClose}
+        setEvents={setEvents}
+        events={events}
       />
     </div>
   );

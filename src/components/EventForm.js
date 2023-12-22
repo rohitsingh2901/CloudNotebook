@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
-const EventForm = ({ selectedEvent, onAddEvent, onClose }) => {
+const EventForm = ({ selectedEvent, onAddEvent, onClose, setEvents, events }) => {
   const [event, setEvent] = useState({
     title: '',
     start: new Date(),
@@ -9,21 +9,54 @@ const EventForm = ({ selectedEvent, onAddEvent, onClose }) => {
   });
 
   useEffect(() => {
-    if (selectedEvent) {
-      setEvent(selectedEvent);
-    } else {
-      setEvent({
-        title: '',
-        start: new Date(),
-        end: new Date(),
-      });
+    
+    fetchEvents();
+    // eslint-disable-next-line
+  }, []);
+  const fetchEvents = async () => {
+    try {   
+      const response = await fetch('/api/events');
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data)
+        setEvents([...events, data]); 
+      } else {
+        throw new Error('Failed to fetch events');
+      }
+    } catch (error) {
+      console.error('Error fetching events:', error);
     }
-  }, [selectedEvent]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onAddEvent(event);
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (event.title === '') return;
+  
+    try {
+      const response = await fetch('http://localhost:5000/api/events', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(event),
+      });
+  
+      if (response.ok) {
+        // Handle successful response
+        const data = await response.json();
+        // Perform any necessary actions after adding the event
+        // For instance, update state or notify the user
+        console.log(data);
+      } else {
+        // Handle error response
+        throw new Error('Failed to add event');
+      }
+    } catch (error) {
+      // Handle fetch errors
+      console.error('Error:', error);
+    }
+  };
+  
 
   return (
     <div>

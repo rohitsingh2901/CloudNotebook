@@ -26,6 +26,7 @@ app.use('/',require('./routes/audio'))
 app.use('/',require('./routes/location'))
 app.use('/',require('./routes/cards'))
 app.use('/',require('./routes/links'))
+app.use('/',require('./routes/calender'))
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 
