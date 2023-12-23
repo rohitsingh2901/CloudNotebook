@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
-const EventForm = ({ selectedEvent, onAddEvent, onClose, setEvents, events }) => {
+const EventForm = ({ selectedEvent, onAddEvent, onClose, setEvents }) => {
   const [event, setEvent] = useState({
     title: '',
     start: new Date(),
@@ -15,11 +15,10 @@ const EventForm = ({ selectedEvent, onAddEvent, onClose, setEvents, events }) =>
   }, []);
   const fetchEvents = async () => {
     try {   
-      const response = await fetch('/api/events');
+      const response = await fetch('http://localhost:5000/api/events');
       if (response.ok) {
         const data = await response.json();
-        console.log(data)
-        setEvents([...events, data]); 
+        setEvents(data); 
       } else {
         throw new Error('Failed to fetch events');
       }

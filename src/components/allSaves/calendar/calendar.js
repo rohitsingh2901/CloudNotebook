@@ -22,6 +22,7 @@ const MyCalendar = () => {
     setEvents([...events, newEvent]);
     handleEventClose();
   };
+  
 
   return (
     <div className='container'>
@@ -39,7 +40,6 @@ const MyCalendar = () => {
         onAddEvent={handleEventAdd}
         onClose={handleEventClose}
         setEvents={setEvents}
-        events={events}
       />
     </div>
   );
