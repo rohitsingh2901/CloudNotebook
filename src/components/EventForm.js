@@ -1,24 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import moment from 'moment';
 
 const EventForm = ({ selectedEvent, onAddEvent, onClose, setEvents }) => {
   const [event, setEvent] = useState({
     title: '',
-    start: new Date(),
-    end: new Date(),
+    start: new Date().toISOString().slice(0, 16), // Default to ISO string format
+    end: new Date().toISOString().slice(0, 16), // Default to ISO string format
   });
 
   useEffect(() => {
-    
     fetchEvents();
     // eslint-disable-next-line
   }, []);
+
   const fetchEvents = async () => {
-    try {   
+    try {
       const response = await fetch('http://localhost:5000/api/events');
       if (response.ok) {
         const data = await response.json();
-        setEvents(data); 
+        console.log(data);
+        setEvents(data.map(event => ({
+          ...event,
+          start: new Date(event.start).toISOString().slice(0, 16),
+          end: new Date(event.end).toISOString().slice(0, 16),
+        })));
       } else {
         throw new Error('Failed to fetch events');
       }
@@ -30,7 +34,7 @@ const EventForm = ({ selectedEvent, onAddEvent, onClose, setEvents }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (event.title === '') return;
-  
+
     try {
       const response = await fetch('http://localhost:5000/api/events', {
         method: 'POST',
@@ -39,23 +43,27 @@ const EventForm = ({ selectedEvent, onAddEvent, onClose, setEvents }) => {
         },
         body: JSON.stringify(event),
       });
-  
+
       if (response.ok) {
-        // Handle successful response
         const data = await response.json();
-        // Perform any necessary actions after adding the event
-        // For instance, update state or notify the user
         console.log(data);
+        onAddEvent({
+          ...event,
+          start: new Date(event.start).toISOString().slice(0, 16),
+          end: new Date(event.end).toISOString().slice(0, 16),
+        });
+        setEvent({
+          title: '',
+          start: new Date().toISOString().slice(0, 16),
+          end: new Date().toISOString().slice(0, 16),
+        });
       } else {
-        // Handle error response
         throw new Error('Failed to add event');
       }
     } catch (error) {
-      // Handle fetch errors
       console.error('Error:', error);
     }
   };
-  
 
   return (
     <div>
@@ -63,7 +71,7 @@ const EventForm = ({ selectedEvent, onAddEvent, onClose, setEvents }) => {
       <form onSubmit={handleSubmit}>
         <label>Title:</label>
         <input
-          class="form-control w-25"
+          className="form-control w-25"
           type="text"
           value={event.title}
           onChange={(e) => setEvent({ ...event, title: e.target.value })}
@@ -71,20 +79,18 @@ const EventForm = ({ selectedEvent, onAddEvent, onClose, setEvents }) => {
 
         <label>Start Date and Time:</label>
         <input
-        class="form-control w-25"
+          className="form-control w-25"
           type="datetime-local"
-          value={moment(event.start).format('YYYY-MM-DDTHH:mm')}
-          onChange={(e) =>
-            setEvent({ ...event, start: new Date(e.target.value) })
-          }
+          value={event.start}
+          onChange={(e) => setEvent({ ...event, start: e.target.value })}
         />
 
         <label>End Date and Time:</label>
         <input
-        class="form-control w-25"
+          className="form-control w-25"
           type="datetime-local"
-          value={moment(event.end).format('YYYY-MM-DDTHH:mm')}
-          onChange={(e) => setEvent({ ...event, end: new Date(e.target.value) })}
+          value={event.end}
+          onChange={(e) => setEvent({ ...event, end: e.target.value })}
         />
 
         <div>
