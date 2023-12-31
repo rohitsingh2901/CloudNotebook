@@ -21,5 +21,22 @@ route.get('/api/events', async (req, res) => {
       res.status(500).json({ message: err.message });
     }
   });
+
+route.post('/api/update-event', async (req, res) => {
+    const {event,selectedEvent} = req.body;
+    try{
+      const updateEvent = await EventModel.findByIdAndUpdate(selectedEvent._id,{title:event.title});
+      if (!updateEvent) {
+        return res.status(404).json({ message: 'Event not found' });
+      }
+
+      return res.status(200).json({ updateEvent });
+    } catch (error) {
+      console.error('Error:', error);
+      return res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+
   
 module.exports = route

@@ -34,6 +34,29 @@ const EventForm = ({ selectedEvent, onAddEvent, onClose, setEvents }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (event.title === '') return;
+    console.log(selectedEvent);
+    if(selectedEvent){
+      try {
+        const response = await fetch('http://localhost:5000/api/update-event', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({event,selectedEvent}),
+        });
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+          console.log("Event updated successfully");
+        } else {
+          throw new Error('Failed to update event');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      } finally{
+        return;
+      }
+    }
 
     try {
       const response = await fetch('http://localhost:5000/api/events', {
