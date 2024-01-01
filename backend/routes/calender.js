@@ -37,6 +37,20 @@ route.post('/api/update-event', async (req, res) => {
     }
   });
 
+  route.delete('/api/delete-event/:id',async(req,res)=>{
+    const id = req.params.id;
+    try {
+      const deletedItem = await EventModel.findByIdAndDelete(id);
+      if (!deletedItem) {
+        return res.status(404).json({ message: 'Event not found' });
+      }
+
+      res.json({ message: 'Event deleted successfully', deletedItem });
+    } catch (error) {
+      res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+  })
+
 
   
 module.exports = route

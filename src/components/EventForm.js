@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const EventForm = ({ selectedEvent, onAddEvent, onClose, setEvents }) => {
+const EventForm = ({ selectedEvent, onAddEvent, onClose, setEvents, fetchEvents }) => {
   const [event, setEvent] = useState({
     title: '',
     start: new Date().toISOString().slice(0, 16), // Default to ISO string format
@@ -8,11 +8,11 @@ const EventForm = ({ selectedEvent, onAddEvent, onClose, setEvents }) => {
   });
 
   useEffect(() => {
-    fetchEvents();
+    fetchEvents2();
     // eslint-disable-next-line
   }, []);
 
-  const fetchEvents = async () => {
+  const fetchEvents2  = async () => {
     try {
       const response = await fetch('http://localhost:5000/api/events');
       if (response.ok) {
@@ -54,6 +54,9 @@ const EventForm = ({ selectedEvent, onAddEvent, onClose, setEvents }) => {
       } catch (error) {
         console.error('Error:', error);
       } finally{
+        selectedEvent=false;
+        onClose();
+        fetchEvents();
         return;
       }
     }
@@ -88,6 +91,28 @@ const EventForm = ({ selectedEvent, onAddEvent, onClose, setEvents }) => {
     }
   };
 
+  const deleteEvent = async()=>{
+    console.log(selectedEvent)
+    if(!selectedEvent) return;
+    try {
+      const response = await fetch(`http://localhost:5000/api/delete-event/${selectedEvent._id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if(response.ok){
+        fetchEvents();
+        console.log("Event deleted sucessfully")
+      }
+      else{
+        throw new Error('Failed to delete the event')
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
   return (
     <div>
       <h2>{selectedEvent ? 'Edit Event' : 'Add Event'}</h2>
@@ -117,11 +142,16 @@ const EventForm = ({ selectedEvent, onAddEvent, onClose, setEvents }) => {
         />
 
         <div>
-          <button className='btn my-3' type="submit">{selectedEvent ? 'Update' : 'Add'}</button>
+          <button className='btn my-3' type="submit">{selectedEvent ? 'Update Event' : 'Add Event'}</button>
           {selectedEvent && (
-            <button type="button" onClick={onClose}>
+            <>
+            <button className='btn my-3 mx-3' type="button" onClick={deleteEvent}>
+              Delete Event
+            </button>
+            <button className='btn my-3' type="button" onClick={onClose}>
               Cancel
             </button>
+            </>
           )}
         </div>
       </form>

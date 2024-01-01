@@ -62,6 +62,7 @@ const MyCalendar = () => {
         onAddEvent={handleEventAdd}
         onClose={handleEventClose}
         setEvents={setEvents}
+        fetchEvents={fetchEvents}
       />
     </div>
   );
